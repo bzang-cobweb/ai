@@ -1,4 +1,4 @@
-# bza — marketplace Claude pour les projets Laravel
+# bza — marketplace Claude
 
 Plugins Claude Code pour démarrer et mener des projets Laravel et Filament : les
 **lois** de travail, la **trace des projets** dans `.ia/`, une **méthode de
