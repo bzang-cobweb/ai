@@ -1,0 +1,11 @@
+{
+  "name": "bza-sysadmin",
+  "version": "0.1.2",
+  "description": "Administration système : environnement local DDEV.",
+  "author": {
+    "name": "bza"
+  },
+  "dependencies": [
+    "bza"
+  ]
+}

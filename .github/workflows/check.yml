@@ -1,0 +1,31 @@
+name: Contrôles du marketplace
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    # Les postes sont des Mac, mais les machines Mac de GitHub sont rares
+    # (attentes de 10 minutes, tâches annulées faute de machine). Les scripts sont
+    # en POSIX sh + jq : sous Linux, `sh` est dash, plus strict que le sh de macOS,
+    # ce qui les éprouve davantage. Seul ce qui est propre à macOS (jq fourni par
+    # le système, chemins de /Library) n'est pas couvert ici.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Outils
+        run: |
+          command -v shellcheck || { sudo apt-get update -q && sudo apt-get install -y -q shellcheck; }
+          command -v jq
+          npm install -g @anthropic-ai/claude-code
+
+      - name: Validation Claude Code
+        run: |
+          claude plugin validate .
+          for p in plugins/*; do claude plugin validate "$p"; done
+
+      - name: Contrôles et tests
+        run: sh tools/check.sh

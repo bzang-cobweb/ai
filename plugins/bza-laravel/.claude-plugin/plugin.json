@@ -1,0 +1,12 @@
+{
+  "name": "bza-laravel",
+  "version": "0.3.0",
+  "description": "Laravel : backend (migrations, modèles, policies, contrôleurs, requêtes et services, ressources d'API), back-office Filament, front (build, Blade), contrat OpenAPI, audit.",
+  "author": {
+    "name": "bza"
+  },
+  "dependencies": [
+    "bza",
+    "bza-dev"
+  ]
+}

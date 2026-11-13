@@ -1,0 +1,25 @@
+{
+  "name": "bza",
+  "owner": {
+    "name": "bza"
+  },
+  "description": "Standards IA pour les projets Laravel : lois, méthode de travail, front, tests et savoir-faire Laravel et Filament.",
+  "plugins": [
+    {
+      "name": "bza",
+      "source": "./plugins/bza"
+    },
+    {
+      "name": "bza-dev",
+      "source": "./plugins/bza-dev"
+    },
+    {
+      "name": "bza-laravel",
+      "source": "./plugins/bza-laravel"
+    },
+    {
+      "name": "bza-sysadmin",
+      "source": "./plugins/bza-sysadmin"
+    }
+  ]
+}

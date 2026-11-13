@@ -1,0 +1,35 @@
+{
+  "forceLoginMethod": "claudeai",
+  "forceLoginOrgUUID": [
+    "96d59cbb-741d-4df7-9cf6-aaa05bcba46f"
+  ],
+  "autoMemoryEnabled": false,
+  "permissions": {
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(ssh *)",
+      "Bash(bza *)",
+      "Bash(bza-toolbox *)",
+      "Bash(sudo *)",
+      "Bash(git add -A)",
+      "Bash(git add -A *)",
+      "Bash(git add --all)",
+      "Bash(git add --all *)",
+      "Bash(git add .)",
+      "Bash(git add . *)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.config/op/**)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/.ddev/config.local.yaml)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Edit(**/.ddev/config.local.yaml)",
+      "Write(**/.env)",
+      "Write(**/.env.*)",
+      "Write(**/.ddev/config.local.yaml)"
+    ]
+  }
+}
