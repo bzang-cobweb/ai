@@ -15,6 +15,7 @@ sur du code existant → la produire d'abord avec `bza-dev:auditor`.
   `bza-laravel:create-policy`, `bza-laravel:create-controller`,
   `bza-laravel:requete-service`, `bza-laravel:api-resource` pour toute réponse
   d'API qui renvoie un modèle.
+- Commande Artisan : `bza-laravel:create-command` — traitement dans un service.
 - Back-office Filament : `bza-laravel:filament-resource`, point d'entrée vers la
   table, le formulaire, l'infolist, les pages et les relation managers.
 - Respecter noms de colonnes, types et valeurs d'enum de la source — aucune
