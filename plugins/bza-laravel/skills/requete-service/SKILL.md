@@ -98,7 +98,10 @@ connaît pas la requête : il est réutilisable depuis une commande, un import o
    }
    ```
    Plusieurs écritures (relations, `sync`, fichiers) s'enveloppent dans
-   `DB::transaction()` à l'intérieur de la méthode. Le contrôleur reçoit la requête
+   `DB::transaction()` à l'intérieur de la méthode. Un traitement qui en
+   déclenche un autre sur ce qu'il vient de produire (créer une commande, puis
+   sa facture) émet un évènement qu'un listener transmet au service suivant :
+   `bza-laravel:service-cascade`. Le contrôleur reçoit la requête
    et le service en paramètres de l'action :
    ```php
    public function store(PostRequest $request, PostService $service): RedirectResponse

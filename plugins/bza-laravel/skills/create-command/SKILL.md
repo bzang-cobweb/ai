@@ -73,6 +73,9 @@ et reste appelable sans elle depuis un job, un contrôleur ou un test.
      `$info` : le conteneur les résout.
    - Plusieurs écritures s'enveloppent dans `DB::transaction()` à l'intérieur
      de `run()`.
+   - Un traitement en cascade (importer un post, puis ses commentaires) passe
+     par un évènement et un listener, jamais par un appel direct au second
+     service : `bza-laravel:service-cascade`.
 3. **`run()`** — l'unique point d'entrée public du traitement. Il reçoit les
    données déjà validées, avec leur forme en PHPDoc (`array{…}`), et peut rendre
    un résultat (nombre traité, rapport) que la commande affiche ou teste.
@@ -129,3 +132,4 @@ et reste appelable sans elle depuis un job, un contrôleur ou un test.
 - Le service affiche uniquement par cette fonction, via sa méthode privée `info()`, qui journalise aussi le message
 - Le service expose `run(array $data)`, appelé par `handle()` ; il ne lit ni `argument()`, ni `option()`, ni la requête
 - La commande valide ses entrées avant d'appeler `run()` et rend `self::SUCCESS` ou `self::FAILURE`
+- Une cascade entre services passe par un évènement et un listener (`bza-laravel:service-cascade`)
