@@ -61,9 +61,9 @@ décidé.
        return new PostResource($post->load('author'));
    }
 
-   public function index(SearchPostRequest $request, PostService $service): AnonymousResourceCollection
+   public function index(SearchPostRequest $request, PostService $postService): AnonymousResourceCollection
    {
-       return PostResource::collection($service->search($request->validated()));
+       return PostResource::collection($postService->search($request->validated()));
    }
    ```
    Une collection construite depuis un paginateur garde `links` et `meta`. Les

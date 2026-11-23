@@ -70,7 +70,7 @@ cascade passe **toujours** par au moins un évènement et un listener.
    final class ImportPostComments
    {
        public function __construct(
-           private readonly ImportCommentsService $service,
+           private readonly ImportCommentsService $importCommentsService,
        ) {}
 
        public function handle(PostImported $event): void
@@ -81,7 +81,7 @@ cascade passe **toujours** par au moins un évènement et un listener.
                return;
            }
 
-           $this->service->run(['post' => $event->post, 'comments' => $comments]);
+           $this->importCommentsService->run(['post' => $event->post, 'comments' => $comments]);
        }
    }
    ```

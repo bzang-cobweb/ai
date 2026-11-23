@@ -25,7 +25,8 @@ et reste appelable sans elle depuis un job, un contrôleur ou un test.
 2. **Service** — `app/Services/<Verbe><Nom>Service.php` (`ImportPostsService`),
    ou dans le dossier `Services` du module. Un service par commande ; s'il existe
    déjà un service pour ce traitement, l'utiliser et lui ajouter la fonction
-   d'affichage et `run()` plutôt que d'en créer un second.
+   d'affichage et `run()` plutôt que d'en créer un second. Nommage de la classe
+   et des variables : `bza-laravel:requete-service` (`$importPostsService`).
    ```php
    final class ImportPostsService
    {
@@ -103,11 +104,11 @@ et reste appelable sans elle depuis un job, un contrôleur ou un test.
                return self::FAILURE;
            }
 
-           $service = app()->make(ImportPostsService::class, [
+           $importPostsService = app()->make(ImportPostsService::class, [
                'info' => fn (string $message) => $this->info($message),
            ]);
 
-           $service->run($validator->validated());
+           $importPostsService->run($validator->validated());
 
            return self::SUCCESS;
        }
@@ -125,15 +126,15 @@ et reste appelable sans elle depuis un job, un contrôleur ou un test.
      est **instancié** dans `handle()` avec `app()->make()` et ce paramètre,
      comme `ImportPostsService` ci-dessus.
    ```php
-   public function handle(PurgeCacheService $cache): int
+   public function handle(PurgeCacheService $purgeCacheService): int
    {
        // … validation
-       $service = app()->make(ImportPostsService::class, [
+       $importPostsService = app()->make(ImportPostsService::class, [
            'info' => fn (string $message) => $this->info($message),
        ]);
 
-       $service->run($validator->validated());
-       $cache->run(['tag' => 'posts']);
+       $importPostsService->run($validator->validated());
+       $purgeCacheService->run(['tag' => 'posts']);
 
        return self::SUCCESS;
    }

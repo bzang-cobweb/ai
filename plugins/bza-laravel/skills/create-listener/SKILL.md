@@ -33,12 +33,13 @@ boucle métier.
    final class ImportPostComments
    {
        public function __construct(
-           private readonly ImportCommentsService $service,
+           private readonly ImportCommentsService $importCommentsService,
        ) {}
    ```
    Un listener qui déclenche plusieurs étapes indépendantes reçoit plusieurs
    services ; si ces étapes n'ont pas d'ordre entre elles, préférer un listener
-   par étape.
+   par étape. Chaque propriété se nomme d'après son service
+   (`$importCommentsService`, `bza-laravel:requete-service`).
 
    **Paramètre non injectable** — quand le service attend un paramètre que le
    conteneur ne peut pas fournir (la fonction d'affichage d'une commande, une
@@ -70,8 +71,8 @@ boucle métier.
                return;
            }
 
-           $service = app()->make(ImportCommentsService::class, ['info' => $event->info]);
-           $service->run(['post' => $event->post, 'comments' => $comments]);
+           $importCommentsService = app()->make(ImportCommentsService::class, ['info' => $event->info]);
+           $importCommentsService->run(['post' => $event->post, 'comments' => $comments]);
        }
    }
    ```
@@ -92,7 +93,7 @@ boucle métier.
            }
 
            // 3. Appeler le service avec ses données.
-           $this->service->run([
+           $this->importCommentsService->run([
                'post' => $event->post,
                'comments' => $comments,
            ]);

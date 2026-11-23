@@ -97,6 +97,12 @@ connaît pas la requête : il est réutilisable depuis une commande, un import o
        }
    }
    ```
+   **Nommage** — le nom de toute classe de service finit par `Service`
+   (`PostService`, `ImportPostsService`), et toute variable, propriété ou
+   paramètre qui en contient une se nomme `<xxx>Service` : par défaut le nom
+   de la classe en camelCase (`$postService`, `$this->importPostsService`),
+   jamais `$service`, `$posts` ni une abréviation.
+
    Plusieurs écritures (relations, `sync`, fichiers) s'enveloppent dans
    `DB::transaction()` à l'intérieur de la méthode. Un traitement qui en
    déclenche un autre sur ce qu'il vient de produire (créer une commande, puis
@@ -104,23 +110,23 @@ connaît pas la requête : il est réutilisable depuis une commande, un import o
    `bza-laravel:service-cascade`. Le contrôleur reçoit la requête
    et le service en paramètres de l'action :
    ```php
-   public function store(PostRequest $request, PostService $service): RedirectResponse
+   public function store(PostRequest $request, PostService $postService): RedirectResponse
    {
-       $post = $service->create($request->validated());
+       $post = $postService->create($request->validated());
 
        return to_route('posts.show', $post);
    }
 
-   public function update(PostRequest $request, Post $post, PostService $service): RedirectResponse
+   public function update(PostRequest $request, Post $post, PostService $postService): RedirectResponse
    {
-       $service->update($post, $request->validated());
+       $postService->update($post, $request->validated());
 
        return to_route('posts.show', $post);
    }
 
-   public function search(SearchPostRequest $request, PostService $service): View
+   public function search(SearchPostRequest $request, PostService $postService): View
    {
-       return view('posts.index', ['posts' => $service->search($request->validated())]);
+       return view('posts.index', ['posts' => $postService->search($request->validated())]);
    }
    ```
    La requête s'autorise et se valide quand le conteneur la construit : une requête
@@ -136,6 +142,7 @@ connaît pas la requête : il est réutilisable depuis une commande, un import o
 ## Règles absolues
 - Toute action qui reçoit des données reçoit une requête personnalisée : ni `Request` générique, ni `$request->validate()`, ni `Validator::make()` dans le contrôleur
 - Seules les données validées sont utilisées : `validated()`, `safe()` ou une méthode de la requête qui en dérive ; jamais `all()` ni `input()`
+- Une classe de service se nomme `<Xxx>Service` ; une variable, propriété ou paramètre qui en contient une se nomme `<xxx>Service` (`$postService`)
 - Le service reçoit des données, jamais la requête : ni `Request` en argument, ni `request()` dans son code
 - La requête s'injecte dans la méthode de l'action, jamais dans le constructeur du contrôleur : un contrôleur qui hérite de `Illuminate\Routing\Controller` (squelettes antérieurs à Laravel 11) est construit avant les middlewares de la route, et la requête serait validée avant `auth` et `can:`
 - Le service fait confiance à ses données : un appelant hors HTTP (commande, import, job) les valide avant l'appel ; une validation qu'il réécrit à côté de la requête se signale (`bza:lois/coherence.md`)
