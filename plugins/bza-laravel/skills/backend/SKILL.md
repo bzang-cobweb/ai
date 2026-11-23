@@ -20,6 +20,8 @@ sur du code existant → la produire d'abord avec `bza-dev:auditor`.
   évènement et listener.
 - Listener d'évènement : `bza-laravel:create-listener` — services injectés,
   `handle()` qui ne fait qu'appeler.
+- Image envoyée (logo, photo) : `bza-laravel:media-conversions` — réglages
+  dans le `.env`, une conversion par écran, image enregistrée optimisée.
 - Back-office Filament : `bza-laravel:filament-resource`, point d'entrée vers la
   table, le formulaire, l'infolist, les pages et les relation managers.
 - Respecter noms de colonnes, types et valeurs d'enum de la source — aucune
