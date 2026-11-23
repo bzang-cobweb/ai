@@ -18,6 +18,8 @@ sur du code existant → la produire d'abord avec `bza-dev:auditor`.
 - Commande Artisan : `bza-laravel:create-command` — traitement dans un service.
 - Traitements en cascade entre services : `bza-laravel:service-cascade` —
   évènement et listener.
+- Listener d'évènement : `bza-laravel:create-listener` — services injectés,
+  `handle()` qui ne fait qu'appeler.
 - Back-office Filament : `bza-laravel:filament-resource`, point d'entrée vers la
   table, le formulaire, l'infolist, les pages et les relation managers.
 - Respecter noms de colonnes, types et valeurs d'enum de la source — aucune

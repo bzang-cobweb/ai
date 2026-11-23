@@ -63,8 +63,9 @@ cascade passe **toujours** par au moins un évènement et un listener.
    }
    ```
 3. **Listener** — `php artisan make:listener ImportPostComments --event=PostImported`,
-   dans `app/Listeners/`, nommé d'après ce qu'il déclenche. Il prend dans
-   `$event->row` les informations de son étape et appelle le service suivant :
+   écrit selon `bza-laravel:create-listener` : le service suivant injecté dans
+   son constructeur, `handle()` qui prend dans `$event->row` les informations
+   de son étape et appelle le service :
    ```php
    final class ImportPostComments
    {
@@ -74,29 +75,31 @@ cascade passe **toujours** par au moins un évènement et un listener.
 
        public function handle(PostImported $event): void
        {
-           $this->service->run([
-               'post' => $event->post,
-               'comments' => $event->row['comments'] ?? [],
-           ]);
+           $comments = $event->row['comments'] ?? [];
+
+           if ($comments === []) {
+               return;
+           }
+
+           $this->service->run(['post' => $event->post, 'comments' => $comments]);
        }
    }
    ```
    Le service de l'étape suivante suit le même schéma que tout service :
    méthode `run()` qui reçoit les données, fonction d'affichage optionnelle au
-   constructeur (`bza-laravel:create-command`). Construit par le conteneur dans
-   le listener, il tourne sans elle : ses messages vont au journal.
-4. **Enregistrer** — la découverte automatique (Laravel 11+) associe le listener
-   à l'évènement par le type de `handle()`. Projet qui déclare ses listeners à la
-   main (`EventServiceProvider`, module) : l'ajouter au même endroit que les autres.
-5. **Synchrone ou en file** — synchrone par défaut. Une étape longue ou qui
-   appelle un service externe implémente `ShouldQueue` sur le listener ; ce
-   choix se note dans le rapport, il change l'ordre dans lequel les messages
-   apparaissent et ce qu'un échec fait remonter.
-6. **Tests** :
+   constructeur (`bza-laravel:create-command`). Injecté dans le listener, il tourne
+   sans elle : ses messages vont au journal. Pour les afficher dans la console
+   de la commande d'origine, l'évènement porte aussi sa fonction d'affichage
+   (`?Closure $info = null`) et le listener instancie le service avec elle
+   (`bza-laravel:create-listener`).
+4. **Enregistrer, synchrone ou en file** — comme tout listener
+   (`bza-laravel:create-listener`).
+5. **Tests** :
    - service de la première étape : `Event::fake([PostImported::class])`, puis
      `Event::assertDispatched(PostImported::class, fn ($e) => $e->post->is($post))` —
      et `assertNotDispatched` quand la première étape échoue ;
-   - listener : `Event::assertListening(PostImported::class, ImportPostComments::class)` ;
+   - listener : écoute, appel avec les bonnes données, aucun appel quand elles
+     manquent (`bza-laravel:create-listener`) ;
    - service de l'étape suivante : seul, par `run()`, comme tout service ;
    - un test de bout en bout **sans** `Event::fake` : la commande ou l'action
      d'origine produit le post **et** ses commentaires.
@@ -106,5 +109,5 @@ cascade passe **toujours** par au moins un évènement et un listener.
 - L'évènement est émis par le service, une fois la première étape enregistrée, et nommé au passé (`PostImported`)
 - Un évènement émis dans une transaction implémente `ShouldDispatchAfterCommit`
 - L'évènement porte la ligne source entière (`$row`), jamais les seules données d'un listener
-- Le listener ne contient aucun traitement : il prend dans `$event->row` les données de son étape et les transmet au `run()` du service suivant
+- Le listener suit `bza-laravel:create-listener` : service injecté au constructeur, `handle()` qui prend dans `$event->row` les données de son étape et appelle le `run()` du service suivant
 - Les tests prouvent l'émission, l'écoute, et la cascade complète sans `Event::fake`

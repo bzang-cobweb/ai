@@ -12,7 +12,7 @@ ramenée à ce schéma si son traitement vit encore dans `handle()`.
 
 | Pièce | Rôle |
 |---|---|
-| Commande | lit et valide les arguments et options, construit le service avec sa fonction d'affichage, appelle `run()`, rend le code de sortie |
+| Commande | lit et valide les arguments et options, obtient le service (injecté, ou instancié avec la fonction d'affichage), appelle `run()`, rend le code de sortie |
 | Service | fait **tout** le traitement ; reçoit en constructeur une fonction d'affichage optionnelle ; expose `run()` qui reçoit les données |
 
 La commande ne contient aucun traitement : ni requête, ni écriture, ni boucle
@@ -114,7 +114,34 @@ et reste appelable sans elle depuis un job, un contrôleur ou un test.
    }
    ```
    `app()->make()` avec le paramètre nommé `info` laisse le conteneur résoudre
-   les autres dépendances du service. La validation se fait ici, comme la
+   les autres dépendances du service.
+
+   **Injecter ou instancier** — comme pour un listener
+   (`bza-laravel:create-listener`) :
+   - un service dont tout le constructeur s'injecte est **injecté**, en
+     paramètre de `handle()` ; jamais résolu par `app()` ni créé par `new` ;
+   - un service qui attend un paramètre que le conteneur ne peut pas fournir —
+     la fonction d'affichage de la commande, une valeur tirée des arguments —
+     est **instancié** dans `handle()` avec `app()->make()` et ce paramètre,
+     comme `ImportPostsService` ci-dessus.
+   ```php
+   public function handle(PurgeCacheService $cache): int
+   {
+       // … validation
+       $service = app()->make(ImportPostsService::class, [
+           'info' => fn (string $message) => $this->info($message),
+       ]);
+
+       $service->run($validator->validated());
+       $cache->run(['tag' => 'posts']);
+
+       return self::SUCCESS;
+   }
+   ```
+   L'injection se fait dans `handle()`, pas dans le constructeur de la
+   commande : sauf chargement différé (attribut `#[AsCommand]`), une commande
+   est construite dès qu'Artisan démarre, même quand une autre est lancée, et
+   ses dépendances le seraient avec elle. La validation se fait ici, comme la
    FormRequest le fait pour une action HTTP (`bza-laravel:requete-service`) : le
    service fait confiance à ses données.
 5. **Tests** :
@@ -122,7 +149,11 @@ et reste appelable sans elle depuis un job, un contrôleur ou un test.
      fonction qui collecte les messages ; vérifier le résultat, l'état en base
      et les messages reçus ; un second cas construit le service **sans**
      fonction d'affichage et doit passer aussi ;
-   - commande : `$this->artisan('posts:import', ['path' => …])` avec
+   - commande : pour remplacer un service injecté, `$this->mock()` ; pour un
+     service instancié avec des paramètres, `$this->mock()` ne suffit pas (le
+     conteneur ignore une instance quand on lui passe des paramètres) : lier le
+     double par `$this->app->bind(ImportPostsService::class, fn ($app, array $params) => $double)` ;
+   - commande, de bout en bout : `$this->artisan('posts:import', ['path' => …])` avec
      `->expectsOutput()` sur un message du service, `->assertSuccessful()` ;
      une entrée invalide donne `->assertFailed()` et rien d'écrit.
 
@@ -132,4 +163,5 @@ et reste appelable sans elle depuis un job, un contrôleur ou un test.
 - Le service affiche uniquement par cette fonction, via sa méthode privée `info()`, qui journalise aussi le message
 - Le service expose `run(array $data)`, appelé par `handle()` ; il ne lit ni `argument()`, ni `option()`, ni la requête
 - La commande valide ses entrées avant d'appeler `run()` et rend `self::SUCCESS` ou `self::FAILURE`
+- Un service dont tout le constructeur s'injecte est injecté en paramètre de `handle()` ; seul un service qui attend un paramètre non injectable (fonction d'affichage, valeur des arguments) est instancié dans `handle()`, avec `app()->make()` et ce paramètre
 - Une cascade entre services passe par un évènement et un listener (`bza-laravel:service-cascade`)
