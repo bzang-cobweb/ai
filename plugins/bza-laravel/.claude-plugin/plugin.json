@@ -1,6 +1,6 @@
 {
   "name": "bza-laravel",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Laravel : backend (migrations, modèles, policies, contrôleurs, requêtes et services, commandes Artisan, cascades par évènements, listeners, ressources d'API, images et conversions), back-office Filament, front (build, Blade), contrat OpenAPI, audit.",
   "author": {
     "name": "bza"
