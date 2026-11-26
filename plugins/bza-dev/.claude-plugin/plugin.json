@@ -1,7 +1,7 @@
 {
   "name": "bza-dev",
-  "version": "0.2.1",
-  "description": "Développement : règles front communes (HTML, SCSS, JS, build), agents auditor et qa, Playwright et tests E2E, preuves en navigateur, parité visuelle, documentation, migration de site.",
+  "version": "0.2.2",
+  "description": "Développement : règles front communes (HTML, SCSS, JS, build), agents auditor et qa, Playwright et tests E2E, preuves en navigateur, parité visuelle, documentation, migration de site, composition (un conteneur qui rend children plutôt que des copies).",
   "author": {
     "name": "bza"
   },

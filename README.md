@@ -9,7 +9,7 @@ chantier**, le savoir-faire front et tests, et le savoir-faire Laravel.
 | Plugin | Contenu |
 |---|---|
 | `bza` | Lois (`bza:lois`), méthode de chantier (`bza:lead`), mode nuit (`bza:nuit`), rétrospective (`bza:retro`), registre des décisions (`bza:decision`), `.env` sans en lire les valeurs (`bza:env`), création du `.ia/` (`bza:projet-init`), migration (`bza:migrer`), fin de mandat (`bza:decommission`), rapport de tâche, analyse de projet. Hooks : liaison du `.ia/` au démarrage, garde-fou (git, `rm -rf`, `ssh`, secrets) |
-| `bza-dev` | Règles front communes (`bza-dev:frontend`, point d'entrée ; `html`, `scss`, `js`, `front-build`) ; agents `auditor` et `qa-check` ; Playwright et tests E2E, preuves en navigateur, `visual-qa`, parité visuelle, documentation, migration de site |
+| `bza-dev` | Règles front communes (`bza-dev:frontend`, point d'entrée ; `html`, `scss`, `js`, `front-build`) ; agents `auditor` et `qa-check` ; Playwright et tests E2E, preuves en navigateur, `visual-qa`, parité visuelle, documentation, migration de site ; composition (`bza-dev:composition` : un conteneur qui rend `children` plutôt que des copies) |
 | `bza-laravel` | Backend (`bza-laravel:backend`, point d'entrée), migrations, modèles, contrôleurs, policies (`bza-laravel:create-policy`), requêtes et services (`bza-laravel:requete-service`), commandes Artisan (`bza-laravel:create-command`), cascades entre services (`bza-laravel:service-cascade`), listeners (`bza-laravel:create-listener`), ressources d'API (`bza-laravel:api-resource`), images et conversions (`bza-laravel:media-conversions`), ressources Filament (`bza-laravel:filament-resource`), OpenAPI, audit ; front (`front-build`, `blade`) |
 | `bza-sysadmin` | Environnement local DDEV (`bza-sysadmin:ddev`) |
 
