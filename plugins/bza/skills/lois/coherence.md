@@ -56,7 +56,28 @@ un agent. Le patch local cesse alors d'être un choix de facilité pour devenir
 ticket de découpe, daté, avec son motif. Une dette écrite se planifie ; une
 dette subie se paie deux fois.
 
-## 5. Ce que cette règle n'autorise pas
+## 5. Dans une fonction, une valeur se calcule une fois
+
+La même règle, à l'échelle d'une fonction : **un appel répété à l'identique —
+même méthode, mêmes arguments, même résultat — se range dans une variable**,
+nommée d'après ce qu'elle contient, puis la variable sert partout.
+
+```php
+$prefix = OfferNotificationFilter::bookingThreadPrefix();
+if (! str_starts_with($event->thread, $prefix)) {
+    return;
+}
+$id = Str::after($event->thread, $prefix);
+```
+
+Deux appels identiques sont deux endroits à modifier, et une invitation à en
+changer un seul. La variable dit aussi au lecteur que c'est **la même** valeur.
+
+Quand ce n'est pas possible, garder l'appel : une valeur qui peut changer entre
+les deux appels (une requête, l'heure, un état modifié entre-temps), ou une
+expression plus courte que le nom qu'on lui donnerait (`$a->b`).
+
+## 6. Ce que cette règle n'autorise pas
 
 Elle ne justifie **aucun refactor spontané**. Un agent sans tâche reste au
 repos (`escalade.md`). Domicilier une règle, poser un verrou, découper un
@@ -75,4 +96,5 @@ exactement le désordre qu'elle prétend corriger.
 - Un balayage énonce par quel mécanisme il a cherché, donc son angle mort
 - Une exception non domiciliée se traite comme une couche manquante à nommer
 - Un dépassement de seuil ouvre un ticket, ne bloque pas un lot
+- Un appel répété à l'identique dans une fonction se range dans une variable
 - Aucun refactor hors ticket

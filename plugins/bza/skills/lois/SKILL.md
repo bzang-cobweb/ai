@@ -20,7 +20,7 @@ geste qu'il encadre.
 | Git | [git.md](git.md) | commiter, intégrer, toute commande git mutante |
 | Preuve | [preuve.md](preuve.md) | annoncer qu'un travail est fait, rendre un verdict |
 | Escalade et décisions | [escalade.md](escalade.md) | poser une question à l'humain, consigner sa réponse |
-| Cohérence du code | [coherence.md](coherence.md) | poser un correctif, ajouter une règle métier |
+| Cohérence du code | [coherence.md](coherence.md) | poser un correctif, ajouter une règle métier, écrire une fonction |
 | Interactions | [interactions.md](interactions.md) | répondre à un humain ou exécuter une tâche d'agent |
 
 ## La trace d'un projet vit dans `.ia/`

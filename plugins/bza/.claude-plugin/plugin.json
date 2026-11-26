@@ -1,6 +1,6 @@
 {
   "name": "bza",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Socle obligatoire : lois, trace du projet dans .ia/, méthode de chantier (lead), garde-fou git, migration et fin de mandat.",
   "author": {
     "name": "bza"
